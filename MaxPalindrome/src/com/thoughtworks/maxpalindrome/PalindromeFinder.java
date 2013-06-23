@@ -1,11 +1,7 @@
 package com.thoughtworks.maxpalindrome;
 
-import java.util.ArrayList;
-import java.util.TreeMap;
-
 public class PalindromeFinder {
 
-	private int maxLength;
 	private Palindrome maxPalindrome;
 	
 	public String findMaxPalindrome(String str) {
@@ -27,30 +23,37 @@ public class PalindromeFinder {
 		PalindromeIndexPair pair = findPair(str, startIndex, endIndex);
 		int calculatedLength = maxPalindrome.getLength(pair);
 		if(calculatedLength != 0) {
-			int maxLength = palindrome.getLength() + calculatedLength;
-			if(maxLength > maxPalindrome.getLength()) {
-				maxPalindrome = palindrome.add(maxPalindrome.getSubPalindrome(pair));
-				return maxPalindrome;
-			}
-			return palindrome;
+			return getCalculatedPalindrome(palindrome, pair, calculatedLength);
 		} 
 		Palindrome originalPalindrome = palindrome.clone();
-		palindrome.addPalindromeIndexPair(pair);
-		PalindromeIndexPair innerMostRegion = palindrome.getInnerMostRegion();
-		Palindrome palindromeIncludingPair = innerMostRegion!=null ? findMaxPalindrome(str, palindrome, innerMostRegion.getHeadIndex(), innerMostRegion.getTailIndex()) : palindrome;
-		Palindrome palindromeExcludingPair = findMaxPalindrome(str, originalPalindrome,startIndex+1, endIndex);
+		Palindrome palindromeIncludingPair = getPalindromeWithPair(str, palindrome, pair);
+		Palindrome palindromeExcludingPair = findMaxPalindrome(str, originalPalindrome, startIndex+1, endIndex);
 		Palindrome longerPalindrome = getLongerPalindrome(palindromeIncludingPair, palindromeExcludingPair);
 		if(longerPalindrome.getLength() > maxPalindrome.getLength()) {
 			maxPalindrome = longerPalindrome;
 		}
 		return longerPalindrome;
-//			int maxLengthExcludingPair = palindrome.getLength() + findMaximumPalindrome(str.substring(1), palindrome.clone());
-//			int maxLengthIncludingPair = palindrome.getLength() + findMaximumPalindrome(newString, palindrome);
-//			maxLength = Math.max(maxLengthExcludingPair, maxLengthIncludingPair);
+	}
+
+
+	private Palindrome getPalindromeWithPair(String str, Palindrome palindrome, PalindromeIndexPair pair) {
+		palindrome.addPalindromeIndexPair(pair);
+		PalindromeIndexPair innerMostRegion = palindrome.getInnerMostRegion();
+		return innerMostRegion!=null ? findMaxPalindrome(str, palindrome, innerMostRegion.getHeadIndex(), innerMostRegion.getTailIndex()) : palindrome;
+	}
+
+
+	private Palindrome getCalculatedPalindrome(Palindrome palindrome,
+			PalindromeIndexPair pair, int calculatedLength) {
+		int maxLength = palindrome.getLength() + calculatedLength;
+		if(maxLength > maxPalindrome.getLength()) {
+			maxPalindrome = palindrome.add(maxPalindrome.getSubPalindrome(pair));
+			return maxPalindrome;
+		}
+		return palindrome;
 	}
 	
 	private Palindrome getLongerPalindrome(Palindrome palindrome1, Palindrome palindrome2) {
-		
 		return palindrome1.getLength()>= palindrome2.getLength() ? palindrome1 : palindrome2;
 	}
 
@@ -69,11 +72,4 @@ public class PalindromeFinder {
 		}
 		throw new IllegalStateException();
 	}
-	
-	private PalindromeIndexPair getPair(int headIndex, int tailIndex) {
-		return new PalindromeIndexPair(headIndex, tailIndex);
-	}
-
-	
-
 }
