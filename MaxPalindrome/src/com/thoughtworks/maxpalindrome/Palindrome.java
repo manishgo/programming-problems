@@ -51,6 +51,14 @@ public class Palindrome implements Cloneable {
 		int endingIndex = innerMostPair.getTailIndex() - 1;
 		return new PalindromeIndexPair(startingIndex, endingIndex);
 	}
+	
+	public Palindrome getSubPalindrome(PalindromeIndexPair startingPair) {
+		Palindrome palindrome = new Palindrome(originalString);
+		if(palindromeCharIndexes.contains(startingPair)) {
+			addPairs(palindrome, palindromeCharIndexes.tailSet(startingPair));
+		}
+		return palindrome;
+	}
 
 	
 	@Override
@@ -64,7 +72,7 @@ public class Palindrome implements Cloneable {
 	}
 	
 	@Override
-	protected Palindrome clone() throws CloneNotSupportedException {
+	protected Palindrome clone() throws RuntimeException {
 		Palindrome clonedPalindrome = new Palindrome(originalString);
 		clonedPalindrome.palindromeCharIndexes = new TreeSet<PalindromeIndexPair>(palindromeCharIndexes);
 		return clonedPalindrome;
@@ -102,6 +110,22 @@ public class Palindrome implements Cloneable {
 
 	private char charAt(int index) {
 		return originalString.charAt(index);
+	}
+
+	public Palindrome add(Palindrome anotherPalindrome) {
+		if(anotherPalindrome.originalString.equals(originalString)) {
+			Palindrome palindrome = new Palindrome(originalString);
+			addPairs(palindrome, palindromeCharIndexes);
+			addPairs(palindrome, anotherPalindrome.palindromeCharIndexes);
+			return palindrome;
+		}
+		return null;
+	}
+
+	private void addPairs(Palindrome palindrome, SortedSet<PalindromeIndexPair> indexPairs) {
+		for(PalindromeIndexPair pair: indexPairs) {
+			palindrome.addPalindromeIndexPair(pair);
+		}
 	}
 
 }

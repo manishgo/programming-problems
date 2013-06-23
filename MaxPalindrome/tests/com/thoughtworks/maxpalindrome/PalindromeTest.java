@@ -8,11 +8,12 @@ import org.junit.Test;
 
 public class PalindromeTest {
 
+	private static final String inputString = "mafdfam";
 	private Palindrome palindrome;
 
 	@Before
 	public void setup() {
-		palindrome = new Palindrome("mafdgam");
+		palindrome = new Palindrome(inputString);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
@@ -117,6 +118,70 @@ public class PalindromeTest {
 		PalindromeIndexPair innerMostRegion = palindrome.getInnerMostRegion();
 		
 		assertNull(innerMostRegion);
+	}
+	
+	@Test
+	public void shouldReturnSubPalindromeGivenValidStartingPair() {
+		palindrome.addPalindromeIndexPair(getPair(0, 6));
+		palindrome.addPalindromeIndexPair(getPair(1, 5));
+		palindrome.addPalindromeIndexPair(getPair(3, 3));
+		
+		Palindrome subPalindrome = palindrome.getSubPalindrome(getPair(1,5));
+		
+		assertEquals("ada",subPalindrome.toString());
+	}
+	
+	@Test
+	public void shouldReturnEmptySubPalindromeGivenInvalidStartingPair() {
+		palindrome.addPalindromeIndexPair(getPair(0, 6));
+		palindrome.addPalindromeIndexPair(getPair(3, 3));
+		
+		Palindrome subPalindrome = palindrome.getSubPalindrome(getPair(1,5));
+		
+		assertEquals("",subPalindrome.toString());
+	}
+	
+	@Test
+	public void shouldAddTwoNonIntersectingPalindromes() {
+		palindrome.addPalindromeIndexPair(getPair(0, 6));
+		palindrome.addPalindromeIndexPair(getPair(1, 5));
+		
+		
+		Palindrome anotherPalindrome = new Palindrome(inputString);
+		anotherPalindrome.addPalindromeIndexPair(getPair(3, 3));
+		
+		Palindrome resultPalindrome = palindrome.add(anotherPalindrome);
+		
+		assertEquals("madam", resultPalindrome.toString());
+	}
+
+	@Test
+	public void shouldAddTwoIntersectingPalindromes() {
+		palindrome.addPalindromeIndexPair(getPair(0, 6));
+		palindrome.addPalindromeIndexPair(getPair(1, 5));
+		palindrome.addPalindromeIndexPair(getPair(3, 3));
+		
+		Palindrome anotherPalindrome = new Palindrome(inputString);
+		anotherPalindrome.addPalindromeIndexPair(getPair(2, 4));
+		anotherPalindrome.addPalindromeIndexPair(getPair(3, 3));
+		
+		Palindrome resultPalindrome = palindrome.add(anotherPalindrome);
+		
+		assertEquals("mafdfam", resultPalindrome.toString());
+	}
+
+	@Test
+	public void shouldPreferFirstPalindromeWhileAddingTwoConflictingPalindromes() {
+		palindrome.addPalindromeIndexPair(getPair(1, 5));
+		palindrome.addPalindromeIndexPair(getPair(3, 3));
+		
+		Palindrome anotherPalindrome = new Palindrome(inputString);
+		anotherPalindrome.addPalindromeIndexPair(getPair(2, 2));
+		anotherPalindrome.addPalindromeIndexPair(getPair(0, 6));
+		
+		Palindrome resultPalindrome = palindrome.add(anotherPalindrome);
+		
+		assertEquals("madam", resultPalindrome.toString());
 	}
 	
 	private PalindromeIndexPair getPair(int headIndex, int tailIndex) {
