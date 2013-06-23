@@ -1,9 +1,12 @@
-package com.thoughtworks.maxpalindrome;
+package com.thoughtworks.maxpalindrome.unit;
 
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.thoughtworks.maxpalindrome.Palindrome;
+import com.thoughtworks.maxpalindrome.PalindromeIndexPair;
 
 
 public class PalindromeTest {

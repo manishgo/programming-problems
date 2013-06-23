@@ -33,12 +33,13 @@ public class Palindrome implements Cloneable {
 
 	
 	public int getLength(PalindromeIndexPair pair) {
-		if(!palindromeCharIndexes.contains(pair)) {
+		if(!containsExactPair(pair)) {
 			return 0;
 		}
 		SortedSet<PalindromeIndexPair> indexPairs = palindromeCharIndexes.tailSet(pair);
 		return calculateLength(indexPairs);
 	}
+
 
 	public PalindromeIndexPair getInnerMostRegion() {
 		
@@ -54,7 +55,7 @@ public class Palindrome implements Cloneable {
 	
 	public Palindrome getSubPalindrome(PalindromeIndexPair startingPair) {
 		Palindrome palindrome = new Palindrome(originalString);
-		if(palindromeCharIndexes.contains(startingPair)) {
+		if(containsExactPair(startingPair)) {
 			addPairs(palindrome, palindromeCharIndexes.tailSet(startingPair));
 		}
 		return palindrome;
@@ -78,6 +79,15 @@ public class Palindrome implements Cloneable {
 		return clonedPalindrome;
 	}
 	
+	private boolean containsExactPair(PalindromeIndexPair pair) {
+		for(PalindromeIndexPair p : palindromeCharIndexes) {
+			if(p.equals(pair)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private int calculateLength(SortedSet<PalindromeIndexPair> indexPairs) {
 		if(indexPairs == null || indexPairs.isEmpty()) {
 			return 0;

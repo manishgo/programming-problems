@@ -1,9 +1,11 @@
-package com.thoughtworks.maxpalindrome;
+package com.thoughtworks.maxpalindrome.unit;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.thoughtworks.maxpalindrome.PalindromeIndexPair;
 
 public class PalindromeIndexPairTest {
 	private PalindromeIndexPair innerPair;
