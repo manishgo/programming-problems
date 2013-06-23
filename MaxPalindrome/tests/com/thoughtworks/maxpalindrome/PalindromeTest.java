@@ -23,6 +23,7 @@ public class PalindromeTest {
 	@Test
 	public void shouldReturnOneCharacterGivenSamePalindromeIndexes() {
 		palindrome.addPalindromeIndexPair(getPair(1,1));
+		
 		assertEquals("a", palindrome.toString());
 	}
 	
@@ -31,6 +32,7 @@ public class PalindromeTest {
 		palindrome.addPalindromeIndexPair(getPair(0, 6));
 		palindrome.addPalindromeIndexPair(getPair(1, 5));
 		palindrome.addPalindromeIndexPair(getPair(3, 3));
+		
 		assertEquals("madam", palindrome.toString());
 	}
 	
@@ -39,6 +41,39 @@ public class PalindromeTest {
 		palindrome.addPalindromeIndexPair(getPair(0, 6));
 		palindrome.addPalindromeIndexPair(getPair(3, 3));
 		assertEquals(3, palindrome.getLength());
+	}
+	
+	@Test
+	public void shouldReturnPalindromeLengthStartingFromGivenPair() {
+		palindrome.addPalindromeIndexPair(getPair(0, 6));
+		palindrome.addPalindromeIndexPair(getPair(1, 5));
+		palindrome.addPalindromeIndexPair(getPair(3, 3));
+		
+		assertEquals(3, palindrome.getLength(getPair(1,5)));
+	}
+
+	@Test
+	public void shouldReturnPalindromeLengthAsZeroStartingFromNonExistingPair() {
+		palindrome.addPalindromeIndexPair(getPair(0, 6));
+		palindrome.addPalindromeIndexPair(getPair(1, 5));
+		
+		assertEquals(0, palindrome.getLength(getPair(3,3)));
+	}
+
+	@Test
+	public void shouldReturnPalindromeLengthAsOneStartingFromInnerMostSinglePair() {
+		palindrome.addPalindromeIndexPair(getPair(0, 6));
+		palindrome.addPalindromeIndexPair(getPair(3, 3));
+		
+		assertEquals(1, palindrome.getLength(getPair(3,3)));
+	}
+
+	@Test
+	public void shouldReturnPalindromeLengthAsTwoStartingFromInnerMostNonSinglePair() {
+		palindrome.addPalindromeIndexPair(getPair(0, 6));
+		palindrome.addPalindromeIndexPair(getPair(1, 5));
+		
+		assertEquals(2, palindrome.getLength(getPair(1,5)));
 	}
 
 	@Test
@@ -51,6 +86,7 @@ public class PalindromeTest {
 		palindrome.addPalindromeIndexPair(pair);
 		
 		PalindromeIndexPair innerMostRegion = palindrome.getInnerMostRegion();
+		
 		assertEquals(getPair(1, 5), innerMostRegion);
 	}
 	
@@ -61,6 +97,7 @@ public class PalindromeTest {
 		palindrome.addPalindromeIndexPair(pair);
 		
 		PalindromeIndexPair innerMostRegion = palindrome.getInnerMostRegion();
+		
 		assertNull(innerMostRegion);
 	}
 	
@@ -71,12 +108,14 @@ public class PalindromeTest {
 		palindrome.addPalindromeIndexPair(pair);
 		
 		PalindromeIndexPair innerMostRegion = palindrome.getInnerMostRegion();
+		
 		assertNull(innerMostRegion);
 	}
 	
 	@Test
 	public void shouldReturnNullAsInnerRegionIfThereIsNoPair() {
 		PalindromeIndexPair innerMostRegion = palindrome.getInnerMostRegion();
+		
 		assertNull(innerMostRegion);
 	}
 	

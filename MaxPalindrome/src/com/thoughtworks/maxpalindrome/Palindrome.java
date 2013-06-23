@@ -28,13 +28,18 @@ public class Palindrome implements Cloneable {
 	
 	
 	public int getLength() {
-		int length = palindromeCharIndexes.size() * 2;
-		if(palindromeCharIndexes.last().isSingle()) {
-			length--;
-		}
-		return length;
+		return calculateLength(palindromeCharIndexes);
 	}
+
 	
+	public int getLength(PalindromeIndexPair pair) {
+		if(!palindromeCharIndexes.contains(pair)) {
+			return 0;
+		}
+		SortedSet<PalindromeIndexPair> indexPairs = palindromeCharIndexes.tailSet(pair);
+		return calculateLength(indexPairs);
+	}
+
 	public PalindromeIndexPair getInnerMostRegion() {
 		
 		if(!doesInnerRegionExist()) {
@@ -65,6 +70,17 @@ public class Palindrome implements Cloneable {
 		return clonedPalindrome;
 	}
 	
+	private int calculateLength(SortedSet<PalindromeIndexPair> indexPairs) {
+		if(indexPairs == null || indexPairs.isEmpty()) {
+			return 0;
+		}
+		int length = indexPairs.size() * 2;
+		if(indexPairs.last().isSingle()) {
+			length--;
+		}
+		return length;
+	}
+
 	private void addCharactersFromIndexPairs(SortedSet<PalindromeIndexPair> indexPairs, Iterator<PalindromeIndexPair> iterator, StringBuilder str) {
 		if(iterator.hasNext()) {
 			PalindromeIndexPair indexPair = iterator.next();
@@ -87,4 +103,5 @@ public class Palindrome implements Cloneable {
 	private char charAt(int index) {
 		return originalString.charAt(index);
 	}
+
 }
